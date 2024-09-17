@@ -1,0 +1,38 @@
+---
+title: "DataSalary"
+author: "Kazuki"
+date: "2024-09-03"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+## Loading Dataset
+
+```{r dataset}
+myData = read.csv("Test.csv")
+```
+
+## Converting character to double
+
+First I need to convert the Salary in Rupees column from characters to a double. R cannot make histograms of columns that are not numeric.
+```{r convert}
+myData$Salary_In_Rupees = as.numeric(gsub(",","", myData$Salary_In_Rupees))
+```
+
+## Histogram
+Salary in Rupees will be the column I choose for the histogram to see the distribution of salaries.The graph seems to imply that most of the salaries are on the lower end.
+```{r}
+hist(myData$Salary_In_Rupees, main = "Histogram of Salaries in Rupees", xlab="Salary in Rupees", ylab = "Frequency")
+```
+## Scatter plot
+I will check if remote working ratio and salary in rupees have a correlation between each other. There is no apparent correlation.
+
+```{r scatter plot}
+library(ggplot2)
+ggplot(myData,aes(x=Remote_Working_Ratio,y=Salary_In_Rupees))+ geom_point(color = "black")
++
+  labs(title = " Remote Working Ratio vs Salary In Rupees", x = "Remote Working Ratio", y = "Salary in Rupees")
+```
+
