@@ -31,8 +31,32 @@ I will check if remote working ratio and salary in rupees have a correlation bet
 
 ```{r scatter plot}
 library(ggplot2)
-ggplot(myData,aes(x=Remote_Working_Ratio,y=Salary_In_Rupees))+ geom_point(color = "black")
-+
+ggplot(myData,aes(x=Remote_Working_Ratio,y=Salary_In_Rupees)) + 
+  geom_point(color = "black")+
   labs(title = " Remote Working Ratio vs Salary In Rupees", x = "Remote Working Ratio", y = "Salary in Rupees")
 ```
 
+#Calculations
+I will use the average salary calculated as a standard for comparing salaries in different locations.
+```{r}
+mean(myData$Salary_In_Rupees)
+```
+
+# Regression
+The regression test oddly enough seems to imply there is a positive correlation since the line is rising as the remote working ratio increases. It could mean that people who work more remotely get paid more.
+```{r}
+library(ggplot2)
+ggplot(myData,aes(x=Remote_Working_Ratio,y=Salary_In_Rupees)) + 
+  geom_point(color = "black")+
+   geom_smooth(method = "lm", se = FALSE, color = "blue")+
+  labs(title = " Remote Working Ratio vs Salary In Rupees", x = "Remote Working Ratio", y = "Salary in Rupees")
+
+```
+# T Test
+I would like to see if Japan pays out better than other countries, so I will compare the salary entries in all countries besides Japan and all entries including Japan. There are much fewer entries than I imagine and based on the P value, we fail to reject the null hypothesis. We cannot support the hypothesis that japan pays out better than other countries.
+```{r}
+japan = subset(myData, Company_Location=="JP")
+notJapan = subset(myData, Company_Location!="JP")
+test_result = t.test(japan$Salary_In_Rupees, notJapan$Salary_In_Rupees)
+print(test_result)
+```
